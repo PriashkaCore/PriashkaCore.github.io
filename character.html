@@ -23,6 +23,13 @@
             min-height: 100vh;
         }
 
+        /* Блокировка прокрутки body при открытом модальном окне */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
        
         header {
             position: fixed;
@@ -242,6 +249,22 @@
             overflow-y: auto;
             max-height: calc(90vh - 20px);
             scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+        }
+
+        /* Стили для скроллбара (опционально) */
+        .modal-row::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-row::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-row::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
         }
 
         .modal-picture {
@@ -485,7 +508,6 @@
                 font-size: 14px;
             }
             
-            /* Социальные иконки и футер — адаптив */
             .social-icons {
                 gap: 25px;
             }
@@ -616,7 +638,7 @@
     <div id="modalRoot" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-close-x" id="modalCloseX">✕</div>
-            <div class="modal-row">
+            <div class="modal-row" id="modalScrollContainer">
                 <div id="modalLargeImg" class="modal-picture"></div>
                 <div class="modal-info">
                     <h2 id="modalMainTitle">Заголовок</h2>
@@ -647,6 +669,27 @@
     </footer>
 
     <script>
+        // Функция для блокировки/разблокировки прокрутки body
+        function lockBodyScroll() {
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+            document.body.classList.add('modal-open');
+            document.body.dataset.scrollY = scrollY;
+        }
+
+        function unlockBodyScroll() {
+            const scrollY = document.body.dataset.scrollY;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.classList.remove('modal-open');
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY));
+                delete document.body.dataset.scrollY;
+            }
+        }
      
         function adjustBodyPadding() {
             const headerEl = document.querySelector('header');
@@ -727,11 +770,17 @@
         const thumbsContainer = document.getElementById('modalThumbsList');
         const closeBtnModal = document.getElementById('modalCloseBtn');
         const closeX = document.getElementById('modalCloseX');
+        const modalScrollContainer = document.getElementById('modalScrollContainer');
 
         function closeModal() {
             modal.classList.remove('active');
+            unlockBodyScroll(); // Разблокируем прокрутку страницы
             setTimeout(() => {
                 modal.style.display = 'none';
+                // Сбрасываем прокрутку модального окна при закрытии
+                if (modalScrollContainer) {
+                    modalScrollContainer.scrollTop = 0;
+                }
             }, 200);
         }
 
@@ -767,6 +816,7 @@
             });
 
             modal.style.display = 'flex';
+            lockBodyScroll(); // Блокируем прокрутку страницы
             setTimeout(() => {
                 modal.classList.add('active');
             }, 10);
@@ -777,6 +827,16 @@
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
+
+        // Предотвращаем передачу событий прокрутки от модального окна к body
+        if (modalScrollContainer) {
+            modalScrollContainer.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+            });
+            modalScrollContainer.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            });
+        }
 
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', () => {
