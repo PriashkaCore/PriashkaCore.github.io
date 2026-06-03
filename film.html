@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНА: правильный viewport для комфортного отображения на любых экранах -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Фильмы и сериалы | SHABASH</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -176,7 +175,7 @@
             width: fit-content;
         }
 
-        /* ОПТИМИЗАЦИЯ: карточки на телефонах (без изменения логики) */
+        
         @media (max-width: 600px) {
             .card-flex {
                 flex-direction: column;
@@ -215,10 +214,13 @@
             background: white;
             max-width: 1100px;
             width: 92%;
+            max-height: 90vh;
             border-radius: 28px;
             overflow: hidden;
             position: relative;
             animation: modalAppear 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes modalAppear {
@@ -232,10 +234,14 @@
             }
         }
 
+    
         .modal-row {
             display: flex;
             flex-direction: row;
             align-items: stretch;
+            overflow-y: auto;
+            max-height: calc(90vh - 20px);
+            scrollbar-width: thin;
         }
 
         .modal-picture {
@@ -252,6 +258,7 @@
             background: white;
             display: flex;
             flex-direction: column;
+            overflow-y: visible;
         }
 
         .modal-info h2 {
@@ -312,16 +319,29 @@
             transform: rotate(90deg);
         }
 
-        /* ОПТИМИЗАЦИЯ: модальное окно на телефонах */
+       
         @media (max-width: 750px) {
             .modal-row {
                 flex-direction: column;
+                max-height: calc(90vh - 30px);
+                overflow-y: auto;
             }
             .modal-picture {
                 min-height: 240px;
+                flex: none;
+                width: 100%;
             }
             .modal-info h2 {
                 font-size: 1.5rem;
+            }
+            .modal-info {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-info {
+                padding: 1.2rem;
             }
         }
 
@@ -393,7 +413,7 @@
             transform: scale(1.2);
         }
 
-        /* ========= ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНОВ: НИЧЕГО НЕ МЕНЯЕМ, ТОЛЬКО АДАПТИВ ========= */
+     
         @media (max-width: 768px) {
             body {
                 padding-top: 70px;
@@ -432,7 +452,6 @@
             }
         }
         
-        /* Дополнительная оптимизация для очень узких экранов */
         @media (max-width: 480px) {
             body {
                 padding-top: 65px;
@@ -555,7 +574,7 @@
         </div>
     </div>
 
-    <!-- ПОДВАЛ -->
+   
     <footer class="bottom-footer">
         <p class="footer-text">Навигация по сайту:</p>
         <div class="footer-links">
@@ -574,7 +593,6 @@
     </footer>
 
     <script>
-        // ОПТИМИЗАЦИЯ: динамическая корректировка отступа для фиксированного хедера
         function adjustBodyPadding() {
             const headerEl = document.querySelector('header');
             if (headerEl) {
@@ -706,7 +724,7 @@
             });
         }
         
-        // ОПТИМИЗАЦИЯ: корректируем отступ body под высоту фиксированного хедера
+        
         window.addEventListener('load', function() {
             adjustBodyPadding();
         });
