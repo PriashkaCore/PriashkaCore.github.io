@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Портфолио | Анимация блоков при прокрутке</title>
+    <!-- Font Awesome 6 (бесплатные иконки соцсетей) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0b1120 0%, #19233c 100%);
+            min-height: 100vh;
+            color: #f0f3fa;
+            line-height: 1.5;
+        }
+
+        /* Импорт шрифта Google для красоты */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+        /* контейнер для центрирования (1/3 страницы) */
+        .container {
+            max-width: 33.333%;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        /* общие стили для блоков — полупрозрачные + анимация */
+        .glass-block {
+            background: rgba(20, 30, 55, 0.55);
+            backdrop-filter: blur(14px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.35);
+            padding: 2rem 2rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(40px) scale(0.96);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+        }
+
+        /* Класс, который добавляется при видимости блока */
+        .glass-block.reveal {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* легкий hover-эффект для блоков */
+        .glass-block:hover {
+            background: rgba(30, 42, 70, 0.7);
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Блок 1: вступление */
+        .intro-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #ffffff, #a0c0ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .intro-text {
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #7bc5ff;
+            font-weight: 600;
+        }
+
+        /* Блок 2: фотография и текст "О себе" в 2 колонки */
+        .about-grid {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .about-photo {
+            flex: 1.2;
+            min-width: 140px;
+            text-align: center;
+        }
+        .about-photo img {
+            width: 100%;
+            max-width: 200px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 2rem;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255,255,240,0.3);
+            transition: transform 0.3s;
+        }
+        .about-photo img:hover {
+            transform: scale(1.02);
+        }
+        .about-text {
+            flex: 2;
+        }
+        .about-text h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.3px;
+            color: #ffffff;
+            border-left: 4px solid #7bc5ff;
+            padding-left: 1rem;
+        }
+        .about-description {
+            color: #cfdef5;
+            line-height: 1.6;
+        }
+        .personal-quote {
+            margin-top: 1rem;
+            font-style: italic;
+            background: rgba(123, 197, 255, 0.15);
+            padding: 0.6rem 1rem;
+            border-radius: 1.5rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Блок 3: 4 интерактивные кнопки */
+        .buttons-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            text-align: center;
+        }
+        .buttons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.9rem 1.6rem;
+            border-radius: 3rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+        }
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+        .nav-btn:hover {
+            background: #3b82f6;
+            border-color: #ffffff80;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -12px #3b82f6;
+        }
+        .nav-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* подвал с иконками соц сетей */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1.8rem 1rem;
+            border-top: 1px solid rgba(255,255,240,0.15);
+            font-size: 0.85rem;
+            color: #9aa9c1;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .social-icons a {
+            color: #e2e8f0;
+            font-size: 1.8rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        }
+        .social-icons a:hover {
+            color: white;
+            background: #3b82f6;
+            transform: translateY(-5px);
+        }
+        /* небольшая анимация для footer */
+        .footer p {
+            opacity: 0.8;
+        }
+
+        /* адаптивность: на планшетах и телефонах ширина блоков увеличивается для комфорта */
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 55%;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 85%;
+            }
+            .glass-block {
+                padding: 1.5rem;
+            }
+            .about-grid {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-text h2 {
+                border-left: none;
+                text-align: center;
+                padding-left: 0;
+            }
+            .buttons-grid {
+                gap: 0.9rem;
+            }
+            .nav-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 550px) {
+            .container {
+                max-width: 92%;
+            }
+            .intro-title {
+                font-size: 1.7rem;
+            }
+        }
+
+        /* декоративная дополнительная анимация для появления */
+        @keyframes subtleGlow {
+            0% { box-shadow: 0 10px 20px -10px rgba(0,0,0,0.2); }
+            100% { box-shadow: 0 20px 35px -8px rgba(59,130,246,0.2); }
+        }
+        .glass-block.reveal {
+            animation: subtleGlow 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- БЛОК 1: Вступление -->
+    <div class="glass-block" id="blockIntro">
+        <div class="intro-title">✨ Добро пожаловать в мой мир ✨</div>
+        <div class="intro-text">
+            Привет! Меня зовут <span class="highlight">Александр</span>, и я создаю цифровые продукты с душой. 
+            Этот сайт — пример того, как <span class="highlight">полупрозрачные блоки</span> появляются плавно при прокрутке, 
+            создавая элегантное и современное впечатление. Здесь вы узнаете немного обо мне, 
+            увидите мою фотографию, а также сможете перейти по интерактивным кнопкам на другие страницы.
+        </div>
+        <div class="intro-text" style="margin-top: 12px;">
+            🌟 Спасибо, что заглянули! Каждый блок аккуратно вписан в <strong>1/3 центра экрана</strong> и 
+            обладает приятным стеклянным эффектом.
+        </div>
+    </div>
+
+    <!-- БЛОК 2: Фотография + текст "О себе" -->
+    <div class="glass-block" id="blockAbout">
+        <div class="about-grid">
+            <div class="about-photo">
+                <!-- Фотография (заглушка с Unsplash: портрет, красивая атмосфера) -->
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&h=300&fit=crop" 
+                     alt="Фото профиля" 
+                     loading="lazy"
+                     onerror="this.src='https://placehold.co/300x300/1e2a47/7bc5ff?text=Photo'">
+            </div>
+            <div class="about-text">
+                <h2>📄 О себе</h2>
+                <div class="about-description">
+                    Я веб-разработчик и дизайнер с опытом более 5 лет. Создаю современные, адаптивные и 
+                    анимированные интерфейсы, которые вдохновляют. Люблю минимализм, продуманную эстетику 
+                    и интерактивность. В свободное время изучаю новые технологии, путешествую и фотографирую.
+                </div>
+                <div class="personal-quote">
+                    <i class="fas fa-quote-left" style="margin-right: 6px; opacity: 0.7;"></i> 
+                    Стремлюсь делать интернет красивее и удобнее для каждого пользователя.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 3: 4 интерактивные кнопки (перенаправление на другие страницы) -->
+    <div class="glass-block" id="blockButtons">
+        <div class="buttons-title">🚀 Полезные разделы</div>
+        <div class="buttons-grid">
+            <!-- кнопки с реальными ссылками (можно заменить на любые URL) 
+                 используем target="_blank" для открытия в новой вкладке, либо можно оставить в этой же -->
+            <a href="https://github.com" target="_blank" class="nav-btn" rel="noopener noreferrer">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://codepen.io" target="_blank" class="nav-btn" rel="noopener noreferrer">
+                <i class="fab fa-codepen"></i> CodePen
+            </a>
+            <a href="https://dribbble.com" target="_blank" class="nav-btn" rel="noopener noreferrer">
+                <i class="fab fa-dribbble"></i> Dribbble
+            </a>
+            <a href="https://t.me" target="_blank" class="nav-btn" rel="noopener noreferrer">
+                <i class="fab fa-telegram"></i> Telegram
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.7;">
+            📌 Нажми на любую кнопку — откроется связанная страница в новой вкладке
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ с иконками социальных сетей -->
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="https://vk.com" target="_blank" aria-label="ВКонтакте"><i class="fab fa-vk"></i></a>
+            <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://t.me" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+        <p style="margin-top: 1.2rem;">© 2025 Александр | Все права защищены | Стеклянные блоки с анимацией</p>
+        <p style="margin-top: 0.4rem; font-size: 0.7rem;">✨ при прокрутке блоки появляются плавно ✨</p>
+    </footer>
+</div>
+
+<script>
+    // === АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ПРИ ПРОКРУТКЕ ===
+    // Используем Intersection Observer API для трёх полупрозрачных блоков.
+    // Блоки получают класс .reveal когда становятся видны.
+
+    // Выбираем все блоки с классом glass-block
+    const blocks = document.querySelectorAll('.glass-block');
+    
+    // Настройки наблюдателя: порог 0.2 (когда 20% блока видно), также небольшой отступ снизу для раннего появления
+    const observerOptions = {
+        threshold: 0.25,       // когда четверть блока видна — срабатывает
+        rootMargin: "0px 0px -40px 0px"   // небольшой отрицательный отступ снизу, чтобы чуть раньше срабатывало
+    };
+    
+    // Функция обратного вызова
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Добавляем класс .reveal для анимации появления
+                entry.target.classList.add('reveal');
+                // После появления можно прекратить наблюдение за этим блоком (опционально, но повышает производительность)
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Начинаем следить за каждым блоком
+    blocks.forEach(block => {
+        appearOnScroll.observe(block);
+    });
+    
+    // Дополнительно: если какие-то блоки уже видны при загрузке страницы,
+    // IntersectionObserver сам отработает, но для верности можно вызвать принудительную проверку
+    // (Браузер сам сработает через событие, но небольшая страховка не помешает)
+    window.addEventListener('load', () => {
+        // повторная проверка (просто чтобы гарантировать, что если блоки видимы, то появятся)
+        blocks.forEach(block => {
+            const rect = block.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            // если блок уже в зоне видимости более чем на 25%
+            if (rect.top < windowHeight - 100 && rect.bottom > 0) {
+                if (!block.classList.contains('reveal')) {
+                    block.classList.add('reveal');
+                    appearOnScroll.unobserve(block);
+                }
+            }
+        });
+    });
+    
+    // Также обработчик скролла не нужен, Observer эффективен.
+    // Поддерживаем анимацию и для мобильных устройств.
+    
+    // Для плавного старта: можно добавить стили для красивой загрузки, 
+    // Если пользователь медленно скроллит — всё равно блоки появятся с анимацией.
+    
+    // Небольшой фикс, чтобы показать "вступление" если страница пустая сверху (часто первый блок виден сразу)
+    // Вручную проверим первый блок при загрузке, если он в зоне видимости без скролла.
+    setTimeout(() => {
+        const firstBlock = document.getElementById('blockIntro');
+        if (firstBlock && !firstBlock.classList.contains('reveal')) {
+            const rect = firstBlock.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 50) {
+                firstBlock.classList.add('reveal');
+                appearOnScroll.unobserve(firstBlock);
+            }
+        }
+        // для второго и третьего тоже быстрая проверка (но они обычно ниже)
+        const secondBlock = document.getElementById('blockAbout');
+        if (secondBlock && !secondBlock.classList.contains('reveal')) {
+            const rect = secondBlock.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                secondBlock.classList.add('reveal');
+                appearOnScroll.unobserve(secondBlock);
+            }
+        }
+        const thirdBlock = document.getElementById('blockButtons');
+        if (thirdBlock && !thirdBlock.classList.contains('reveal')) {
+            const rect = thirdBlock.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                thirdBlock.classList.add('reveal');
+                appearOnScroll.unobserve(thirdBlock);
+            }
+        }
+    }, 200);
+    
+    // Дополнительная эстетика: при нажатии на кнопки выводим легкое console сообщение (необязательно)
+    const btns = document.querySelectorAll('.nav-btn');
+    btns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // просто пример: сообщение в консоль (не мешает работе)
+            console.log(`Переход по ссылке: ${btn.innerText.trim()}`);
+        });
+    });
+    
+    // Обработка ошибок изображения (чтобы не было битой иконки)
+    const profileImg = document.querySelector('.about-photo img');
+    if (profileImg) {
+        profileImg.addEventListener('error', () => {
+            if (!profileImg.hasAttribute('data-fallback')) {
+                profileImg.setAttribute('data-fallback', 'true');
+                profileImg.src = 'https://placehold.co/300x300/1e2a47/7bc5ff?text=Аватар';
+            }
+        });
+    }
+</script>
+
+<!-- Небольшой блок с пояснением (чисто визуальная инструкция) -->
+<div style="text-align: center; margin-top: -1rem; margin-bottom: 1rem; font-size: 0.7rem; color: #7e8aa8;">
+    ⬇️ Прокрутите вниз — полупрозрачные блоки появятся с анимацией ⬇️
+</div>
+
+<!-- Убеждаемся, что контейнер центрирован, а body имеет минимальную высоту для скролла -->
+</body>
+</html>

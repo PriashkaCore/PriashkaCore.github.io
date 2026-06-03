@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои любимые игры | Блог SHABASH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-image: url('angel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #8d8b8c;
+            color: black;
+            padding: 40px 30px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .logo-block:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .logo-block img {
+            height: 45px;
+            width: auto;
+        }
+        
+        .logo-block span {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: black;
+        }
+
+        .content {
+            height: calc(100vh - 200px);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: black;
+        }
+
+        p {
+            line-height: 1.6;
+            color: black;
+        }
+
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #aaa;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 18px;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #cfcfcf;
+            border-bottom-color: #cfcfcf; 
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 20px 0;
+        }
+
+        .animated-block {
+            width: 90%;
+            max-width: 900px;
+            height: calc(100vh / 3);
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+            cursor: pointer;
+        }
+
+        
+        .animated-block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .block-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        
+        .block-image {
+            width: 40%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-right: 30px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .text-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .text-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #000000;
+        }
+
+        
+        .block-1 {
+            background: rgba(255, 255, 255, 0.64);
+            color: white;
+        }
+
+        .block-2 {
+            background: rgba(255, 255, 255, 0.64);
+            color: white;
+        }
+
+        .block-3 {
+            background: rgba(255, 255, 255, 0.64);
+            color: white;
+        }
+
+        .block-4 {
+            background: rgba(255, 255, 255, 0.64);
+            color: #333;
+        }
+
+        .block-5 {
+            background: rgba(255, 255, 255, 0.64);
+            color: white;
+        }
+
+        
+        footer.bottom-footer {
+            background-color: rgb(51, 51, 51);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 2px solid #ffffff;
+            margin-top: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        footer.bottom-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: white;
+        }
+
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, transform 0.2s;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #2575fc;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .social-icons {
+                gap: 25px;
+            }
+            
+            .social-icons a {
+                font-size: 1.4rem;
+            }
+            
+            .footer-text {
+                font-size: 0.9rem;
+            }
+
+            .footer-links {
+                gap: 15px;
+            }
+
+            .footer-links a {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+
+            .animated-block {
+                flex-direction: column;
+                height: auto;
+                min-height: calc(100vh / 3);
+                text-align: center;
+                padding: 20px;
+            }
+
+            .block-image {
+                width: 80%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+       
+        <a href="index.html" class="logo-block" id="mainLogoLink">
+            <img src="witch.png" alt="Логотип">
+            <span>SHABASH</span>
+        </a>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </nav>
+        <h2 style="margin:0;"></h2>
+    </header>
+    <div class="header"></div>
+    <div class="container">
+        
+        <div class="animated-block block-1">
+            <img src="genshin.png" alt="Изображение блока 1" class="block-image">
+            <div class="text-content">
+                <h2>Genshin Impact</h2>
+                <p>Типичная гача в которую играет любой человек,которому делать нечего.
+                    В геншу начала играть еще с сентября 2021 года.Обычная игра с открытым миром и крутками.Самый интересный сюжет был до выхода региона "Сумеру", сейчас же идёт сплошной бред. На момент у меня 57 рп.
+                </p>
+            </div>
+        </div>
+
+     
+        <div class="animated-block block-2">
+            <img src="cultofthelamb.png" alt="Изображение блока 2" class="block-image">
+            <div class="text-content">
+                <h2>Cult of the lamb</h2>
+                <p>С культом познакомилась благодаря видеоблогеру "HappyWolf". Прикольная стратегия, совмещенная с пещерными похождениями. Как человек, который "строит свой коммунизм", игрушка вайб.</p>
+            </div>
+        </div>
+
+       
+        <div class="animated-block block-3">
+            <img src="re4.png" alt="Изображение блока 3" class="block-image">
+            <div class="text-content">
+                <h2>Resident Evil 4re</h2>
+                <p>4 ремейк лучшее,что со мной случилось. Недавно начала проходить сама,также планирую пройти и старые части.(надеюсь когда-нибудь дойду до реквиема и деревни)</p>
+            </div>
+        </div>
+
+        <div class="animated-block block-4">
+            <img src="ets.png" alt="Изображение блока 4" class="block-image">
+            <div class="text-content">
+                <h2>Euro Track Simulator 2</h2>
+                <p>ЕТС легенда,особенно если играешь с друзьями.Порой работа дальнобойщика успокаивает.</p>
+            </div>
+        </div>
+
+        
+        <div class="animated-block block-5">
+            <img src="rv.png" alt="Изображение блока 5" class="block-image">
+            <div class="text-content">
+                <h2>RV There yet</h2>
+                <p>РВ любимая игра Дани и Насти,они так обожают играть в нее.Ну а если серьёзно, игрушка то прикольная,но порой охото ноут в окно выкинуть.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bottom-footer">
+        <p class="footer-text">Навигация по сайту:</p>
+        <div class="footer-links">
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </div>
+        <p class="footer-text" style="margin-top: 15px;">Мои социальные сети:</p>
+        <div class="social-icons">
+            <a href="https://vk.com/priashkaa" title="ВКонтакте" target="_blank"><i class="fab fa-vk"></i></a>
+            <a href="https://steamcommunity.com/profiles/76561198358664504/" title="Steam" target="_blank"><i class="fab fa-steam"></i></a>
+            <a href="https://discordapp.com/users/683645461911044235" title="Discord" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+    </footer>
+
+    <script>
+       
+        document.addEventListener('DOMContentLoaded', function() {
+            const blocks = document.querySelectorAll('.animated-block');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('block-visible');
+                    }
+                });
+            }, observerOptions);
+
+            blocks.forEach((block, index) => {
+                block.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(block);
+            });
+
+           
+            setTimeout(() => {
+                blocks.forEach(block => {
+                    const rect = block.getBoundingClientRect();
+                    if (rect.top < window.innerHeight - 100) {
+                        block.classList.add('block-visible');
+                    }
+                });
+            }, 100);
+        });
+
+        
+        const footer = document.querySelector('.bottom-footer');
+        
+        const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    footerObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        if (footer) {
+            footerObserver.observe(footer);
+        }
+
+        
+        const checkFooterVisibility = () => {
+            if (footer) {
+                const footerRect = footer.getBoundingClientRect();
+                if (
+                    footerRect.top >= 0 &&
+                    footerRect.left >= 0 &&
+                    footerRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    footerRect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                ) {
+                    footer.classList.add('visible');
+                }
+            }
+        };
+
+        window.addEventListener('load', checkFooterVisibility);
+        window.addEventListener('resize', checkFooterVisibility);
+
+        
+        const logoLink = document.getElementById('mainLogoLink');
+        if (logoLink) {
+            logoLink.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            logoLink.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            logoLink.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        }
+
+        
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книги и новеллы | SHABASH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-image: url('angel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+       
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #8d8b8c;
+            color: black;
+            padding: 40px 30px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .logo-block:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .logo-block img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo-block span {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: black;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 18px;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #cfcfcf;
+            border-bottom-color: #cfcfcf; 
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        
+        .card {
+            width: 100%;
+            max-width: 980px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.55s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.12s; }
+        .card:nth-child(3) { animation-delay: 0.19s; }
+        .card:nth-child(4) { animation-delay: 0.26s; }
+        .card:nth-child(5) { animation-delay: 0.33s; }
+        .card:nth-child(6) { animation-delay: 0.40s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        .card-flex {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.2rem;
+        }
+
+        .card-img {
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+        }
+
+        .card-text h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1a3c4c;
+        }
+
+        .card-text p {
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #2c5a6e;
+            margin-bottom: 0.6rem;
+        }
+
+        .badge {
+            background: #e6f0f5;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #1f6e8a;
+            width: fit-content;
+        }
+
+        @media (max-width: 600px) {
+            .card-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card-img {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+            }
+            .badge {
+                margin: 0 auto;
+            }
+        }
+
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            max-width: 1100px;
+            width: 92%;
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-row {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+        }
+
+        .modal-picture {
+            flex: 1.2;
+            background-size: cover;
+            background-position: center;
+            min-height: 380px;
+            background-color: #cbdae6;
+        }
+
+        .modal-info {
+            flex: 1;
+            padding: 2rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-info h2 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: #0f4f3e;
+        }
+
+        .modal-info p {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: #255c72;
+            margin-bottom: 1.5rem;
+        }
+
+       
+        .thumbs-box {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .thumb-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 90px;
+        }
+
+        .mini-img {
+            width: 85px;
+            height: 85px;
+            border-radius: 16px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #eef2f8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .thumb-caption {
+            font-size: 0.7rem;
+            color: #4a6f85;
+            text-align: center;
+            font-weight: 500;
+            max-width: 85px;
+            word-break: break-word;
+        }
+
+        .close-modal-btn {
+            background: #1f6e8c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            width: fit-content;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .close-modal-btn:hover {
+            background: #0c4f68;
+            transform: scale(0.97);
+        }
+
+        .modal-close-x {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            width: 42px;
+            height: 42px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+            z-index: 10001;
+            font-family: monospace;
+        }
+
+        .modal-close-x:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 750px) {
+            .modal-row {
+                flex-direction: column;
+            }
+            .modal-picture {
+                min-height: 240px;
+            }
+            .thumb-item {
+                width: 75px;
+            }
+            .mini-img {
+                width: 70px;
+                height: 70px;
+            }
+            .thumb-caption {
+                font-size: 0.65rem;
+            }
+            .modal-info h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+       
+        footer.bottom-footer {
+            background-color: rgb(51, 51, 51);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 2px solid #ffffff;
+            margin-top: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        footer.bottom-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, transform 0.2s;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #2575fc;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .social-icons {
+                gap: 25px;
+            }
+            .social-icons a {
+                font-size: 1.4rem;
+            }
+            .footer-text {
+                font-size: 0.9rem;
+            }
+            .footer-links {
+                gap: 15px;
+            }
+            .footer-links a {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+            header {
+                padding: 40px 15px;
+            }
+            .logo-block span {
+                font-size: 18px;
+            }
+            .logo-block img {
+                height: 35px;
+            }
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
+            body {
+                padding-top: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <a href="index.html" class="logo-block" id="mainLogoLink">
+            <img src="witch.png" alt="Логотип">
+            <span>SHABASH</span>
+        </a>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </nav>
+        <h2 style="margin:0;"></h2>
+    </header>
+
+    <div class="container">
+        
+        <div class="card" data-id="1">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('atomic.png')"></div>
+                <div class="card-text">
+                    <h3>Atomic Heart. Предыстория предприятия 3826</h3>
+                    <p>Книга про популярную игру 2023 года «Atomic Heart». Игрушка запала мне в сердце, смотрела прохождение от разных блогеров, но поиграть не позволяет техника. :( </p>
+                    <span class="badge">Книга</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="2">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('snr.jpg');"></div>
+                <div class="card-text">
+                    <h3>Секрет небес - реквием</h3>
+                    <p>СНР — одна из самых лучших историй, которые я читала. Безумно нравятся вайб и сюжет истории.</p>
+                    <span class="badge">Визуальная новелла</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="3">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('kps.png');"></div>
+                <div class="card-text">
+                    <h3>Кали - пламя сансары</h3>
+                    <p>КПС — тоже обожаемая история. Пока читала её, всё больше проникалась культурой Индии. В будущем охота посетить страну.</p>
+                    <span class="badge">Визуальная новелла</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="4">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('rsa.jpg');"></div>
+                <div class="card-text">
+                    <h3>Разбитое сердце Астреи</h3>
+                    <p>РСА — история с моим любимым жанром. Мистика, сверхъестественное и капля триллера. История тоже осталась в сердечке.</p>
+                    <span class="badge">Визуальная новелла</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="5">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('ipnm.jpg');"></div>
+                <div class="card-text">
+                    <h3>И поглотит нас морок</h3>
+                    <p>История, вдохновлённая славянской мифологией. Также присутствует мистика и триллер.</p>
+                    <span class="badge">Визуальная новелла</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="6">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('kzt.png');"></div>
+                <div class="card-text">
+                    <h3>Кали - зов тьмы</h3>
+                    <p>История КЗТ происходит после событий из истории КПС. К слову, «Зов тьмы» я прочитала первым, потом уже вышла «Сансара».</p>
+                    <span class="badge">Визуальная новелла</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="modalRoot" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-close-x" id="modalCloseX">✕</div>
+            <div class="modal-row">
+                <div id="modalLargeImg" class="modal-picture"></div>
+                <div class="modal-info">
+                    <h2 id="modalMainTitle">Заголовок</h2>
+                    <p id="modalMainDesc">Расширенное описание будет здесь...</p>
+                    <div id="modalThumbsList" class="thumbs-box"></div>
+                    <button id="modalCloseBtn" class="close-modal-btn">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="bottom-footer">
+        <p class="footer-text">Навигация по сайту:</p>
+        <div class="footer-links">
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </div>
+        <p class="footer-text" style="margin-top: 15px;">Мои социальные сети:</p>
+        <div class="social-icons">
+            <a href="https://vk.com/priashkaa" title="ВКонтакте" target="_blank"><i class="fab fa-vk"></i></a>
+            <a href="https://steamcommunity.com/profiles/76561198358664504/" title="Steam" target="_blank"><i class="fab fa-steam"></i></a>
+            <a href="https://discordapp.com/users/683645461911044235" title="Discord" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        
+        const blocksContent = {
+            1: {
+                title: "Atomic Heart. Предыстория предприятия 3826",
+                description: "Книгу я так и не дочитала,но постараюсь рассказать то,что прочитала. Книга рассказывает, как учёный Дмитрий Сеченов в 1936 году изобрёл уникальный полимер, позволивший СССР создать альтернативное будущее с роботами и сетью научных комплексов «Предприятие 3826». Действие охватывает период с конца 1930-х, включая альтернативную Вторую мировую войну. Рассказывается предыстория Сеченова, молодого майора Нечаева (П-3) и других ключевых персонажей. Повествование заканчивается за несколько часов до начала игры, объясняя, почему роботы вышли из-под контроля. ",
+                mainImage: "Atomic Heart.jpg",
+                thumbImages: [
+                    { url: "Сергей Нечаев.jpg", caption: "Протагонист. Сергей Нечаев" },
+                    { url: "харитончик.jpg", caption: "Антагонист. Захаров Х.Р.(перчатка)" },
+                    { url: "bonk.jpg", caption: "Концовка игры core:" }
+                ]
+            },
+            2: {
+                title: "Секрет небес - реквием",
+                description: "Действие новеллы «Секрет Небес — Реквием» происходит после событий «Секрета Небес 2», когда мир людей погрузился в хаос из-за пришествия Всадников Апокалипсиса . Главная героиня Лэйн — криптограф, работавшая на секретной военной базе «Сибирь» над расшифровкой древней Книги Апокалипсиса . Три года назад база рухнула под землю, на её месте открылся разлом, откуда хлынули демонические отродья и заражённые, уничтожающие всё живое . Лэйн приходит в себя у этого разлома, не помня, что с ней произошло, и её находит элитный военный отряд, отправленный на разведку . В составе этого отряда ей предстоит не только выживать в новом жестоком мире, где не осталось места чувствам, но и разгадать тайну Книги Апокалипсиса, которая может дать человечеству ответы на причины случившегося — при этом сама Лэйн ощущает с книгой загадочную связь.",
+                mainImage: "Bhaal.jpg",
+                thumbImages: [
+                    { url: "Лэйн.jpg", caption: "Главная героиня. Лэйн" },
+                    { url: "каин.jpg", caption: "Любовная линия. Каин" },
+                    { url: "мемы кр.jpg", caption: "Мем с Ноа" }
+                ]
+            },
+            3: {
+                title: "Кали - пламя сансары",
+                description: "Действие новеллы «Кали: Пламя Сансары» происходит в Калькутте 1895 года, во времена британского колониального правления. Главная героиня Деви, девушка из знатной семьи Шарма, вынуждена стать невестой английского лорда — своего врага — ради политического союза между влиятельными кланами Басу и Дубей. Однако вскоре она оказывается втянута не только в интриги высшего общества, но и в логово древнего зла, сталкиваясь с таинственными пророчествами, которые грозят ей скорой смертью. Деви предстоит рискнуть своей судьбой и душой в мистическом противостоянии с темными силами.",
+                mainImage: "Деви.jpg",
+                thumbImages: [
+                    { url: "Деви _ Devi.jpg", caption: "Главная героиня. Дивия" },
+                    { url: "Рам.jpg", caption: "Любовная линия. Рам" },
+                    { url: "как Деви воскрешали.jpg", caption: "Мем с дюжиной" }
+                ]
+            },
+            4: {
+                title: "Разбитое сердце Астреи",
+                description: "Действие новеллы «Разбитое сердце Астреи» происходит в детективном агентстве «Астрея», которое расследует мистические преступления. Главная героиня Одри — бывший психолог, лишившаяся лицензии и работы в клинике «Гудлам» после того, как её пациент внезапно проявил агрессию. В поисках нового места она устраивается оценщицей в агентство с дурной репутацией «охотников за привидениями», где сталкивается со странными коллегами и необъяснимыми явлениями. В процессе работы Одри оказывается втянута в расследование, связанное с культом Зверя, тайнами своего собственного прошлого и противостоянием с загадочным Малеком Синнером, который оказывается ключевой фигурой в сюжете. Ей предстоит разобраться, почему она так желанна для сверхъестественных сил, и сделать выбор между миром чудес и обычной жизнью без магии.",
+                mainImage: "Астрея.jpg",
+                thumbImages: [
+                    { url: "Oдри.jpg", caption: "Главная героин. Одри" },
+                    { url: "Микаэль.jpg", caption: "Любовная линия. Микаэль" },
+                    { url: "давид мем.jpg", caption: "Мем с Давидом " }
+                ]
+            },
+            5: {
+                title: "И поглотит нас морок",
+                description: " Действие новеллы «И поглотит нас морок» происходит в затерянной деревне, окутанной смертоносным туманом, где боги давно покинули этот мир . Главная героиня Лада привыкла к тишине и тайнам своего дома, но всё меняется, когда она чувствует, что Морок призывает её . Вскоре её сестра Верея исчезает, однако её призрак начинает преследовать Ладу, указывая путь во тьму . Деревню населяют отродья тумана — кощеи, которые хватают живых и утаскивают в чащу, а на болотах обитают русалки-мавки . Ладе предстоит столкнуться с древними ритуалами, принести жертвы и разобраться, почему она слышит зов Морока. От выбора героини зависит, станет ли она на путь Сострадания или Упрямства, выберет реальность или же погрузится в туман, чтобы раскрыть правду о проклятии, которое грозит поглотить всех .",
+                mainImage: "И Поглотит Нас Морок.jpg",
+                thumbImages: [
+                    { url: "Лада.jpg", caption: "Главная героиня. Лада" },
+                    { url: "новак.jpg", caption: "Любовная линия. Новак" },
+                    { url: "мемы ипнм.jpg", caption: "Мем с Драганом и Волотом" }
+                ]
+            },
+            6: {
+                title: "Кали - зов тьмы",
+                description: "Действие новеллы «Кали: Зов Тьмы» происходит в Индии, куда главная героиня Амала, молодая индианка, выросшая в Лондоне, приезжает на свадьбу своей сестры. Однако торжество оборачивается кошмаром: она становится свидетельницей жестокого ритуала убийства, после чего её начинают преследовать видения индийской богини Кали. Амала оказывается втянута в опасный мир древних проклятий, фанатиков-одержимых и божественных воплощений. Чтобы спасти себя и близких, ей предстоит распутать клубок из политических интриг, мистики и насилия, а также разобраться в своём собственном наследии — считается, что она является воплощением Авадхуты (спасительницы, разрывающей цикл Сансары). Выбор героини будет лежать между путями Добродетели и Мудрости, а один из главных любовных интересов — загадочный и жестокий Амрит, глава семьи Дубеев, с которым у Амалы возникает опасная связь.",
+                mainImage: "зов тьмы.jpg",
+                thumbImages: [
+                    { url: "Амала Басу.jpg", caption: "Главная героиня. Амала" },
+                    { url: "рэйтан.jpg", caption: "Любовная линия. Рэйтан" },
+                    { url: "мем кзт.jpg", caption: "Мем с дюжтной и следаками" }
+                ]
+            }
+        };
+
+        // DOM элементы модального окна
+        const modal = document.getElementById('modalRoot');
+        const modalImg = document.getElementById('modalLargeImg');
+        const modalTitle = document.getElementById('modalMainTitle');
+        const modalDesc = document.getElementById('modalMainDesc');
+        const thumbsContainer = document.getElementById('modalThumbsList');
+        const closeBtnModal = document.getElementById('modalCloseBtn');
+        const closeX = document.getElementById('modalCloseX');
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 200);
+        }
+
+        function openModalById(id) {
+            const data = blocksContent[id];
+            if (!data) return;
+
+            modalImg.style.backgroundImage = `url('${data.mainImage}')`;
+            modalImg.style.backgroundSize = "cover";
+            modalImg.style.backgroundPosition = "center";
+            
+            modalTitle.innerText = data.title;
+            modalDesc.innerText = data.description;
+
+            thumbsContainer.innerHTML = '';
+            data.thumbImages.forEach(thumb => {
+                const thumbItem = document.createElement('div');
+                thumbItem.className = 'thumb-item';
+                
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'mini-img';
+                imgDiv.style.backgroundImage = `url('${thumb.url}')`;
+                imgDiv.style.backgroundSize = "cover";
+                imgDiv.style.backgroundPosition = "center";
+                
+                const captionSpan = document.createElement('span');
+                captionSpan.className = 'thumb-caption';
+                captionSpan.innerText = thumb.caption;
+                
+                thumbItem.appendChild(imgDiv);
+                thumbItem.appendChild(captionSpan);
+                thumbsContainer.appendChild(thumbItem);
+            });
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        }
+
+        closeBtnModal.addEventListener('click', closeModal);
+        closeX.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-id');
+                if (id && blocksContent[id]) {
+                    openModalById(id);
+                }
+            });
+        });
+
+        const footer = document.querySelector('.bottom-footer');
+        const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    footerObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        if (footer) {
+            footerObserver.observe(footer);
+        }
+
+        const checkFooterVisibility = () => {
+            if (footer) {
+                const footerRect = footer.getBoundingClientRect();
+                if (footerRect.top >= 0 && footerRect.bottom <= (window.innerHeight || document.documentElement.clientHeight)) {
+                    footer.classList.add('visible');
+                }
+            }
+        };
+        window.addEventListener('load', checkFooterVisibility);
+        window.addEventListener('resize', checkFooterVisibility);
+
+        
+        const logoLink = document.getElementById('mainLogoLink');
+        if (logoLink) {
+            logoLink.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            logoLink.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            logoLink.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        }
+
+
+    </script>
+</body>
+</html>

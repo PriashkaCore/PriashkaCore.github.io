@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильмы и сериалы | SHABASH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-image: url('angel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #8d8b8c;
+            color: black;
+            padding: 40px 30px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .logo-block:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .logo-block img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo-block span {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: black;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 18px;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #cfcfcf;
+            border-bottom-color: #cfcfcf; 
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        
+        .card {
+            width: 100%;
+            max-width: 980px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.55s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.12s; }
+        .card:nth-child(3) { animation-delay: 0.19s; }
+        .card:nth-child(4) { animation-delay: 0.26s; }
+        .card:nth-child(5) { animation-delay: 0.33s; }
+        .card:nth-child(6) { animation-delay: 0.40s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        .card-flex {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.2rem;
+        }
+
+        .card-img {
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+        }
+
+        .card-text h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1a3c4c;
+        }
+
+        .card-text p {
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #2c5a6e;
+            margin-bottom: 0.6rem;
+        }
+
+        .badge {
+            background: #e6f0f5;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #1f6e8a;
+            width: fit-content;
+        }
+
+        @media (max-width: 600px) {
+            .card-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card-img {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+            }
+            .badge {
+                margin: 0 auto;
+            }
+        }
+
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            max-width: 1100px;
+            width: 92%;
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-row {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+        }
+
+        .modal-picture {
+            flex: 1.2;
+            background-size: cover;
+            background-position: center;
+            min-height: 380px;
+            background-color: #cbdae6;
+        }
+
+        .modal-info {
+            flex: 1;
+            padding: 2rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-info h2 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: #0f4f3e;
+        }
+
+        .modal-info p {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: #255c72;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-modal-btn {
+            background: #1f6e8c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            width: fit-content;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .close-modal-btn:hover {
+            background: #0c4f68;
+            transform: scale(0.97);
+        }
+
+        .modal-close-x {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            width: 42px;
+            height: 42px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+            z-index: 10001;
+            font-family: monospace;
+        }
+
+        .modal-close-x:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 750px) {
+            .modal-row {
+                flex-direction: column;
+            }
+            .modal-picture {
+                min-height: 240px;
+            }
+            .modal-info h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+       
+        footer.bottom-footer {
+            background-color: rgb(51, 51, 51);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 2px solid #ffffff;
+            margin-top: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        footer.bottom-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, transform 0.2s;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #2575fc;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .social-icons {
+                gap: 25px;
+            }
+            .social-icons a {
+                font-size: 1.4rem;
+            }
+            .footer-text {
+                font-size: 0.9rem;
+            }
+            .footer-links {
+                gap: 15px;
+            }
+            .footer-links a {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+            header {
+                padding: 40px 15px;
+            }
+            .logo-block span {
+                font-size: 18px;
+            }
+            .logo-block img {
+                height: 35px;
+            }
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
+            body {
+                padding-top: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <a href="index.html" class="logo-block" id="mainLogoLink">
+            <img src="witch.png" alt="Логотип">
+            <span>SHABASH</span>
+        </a>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </nav>
+        <h2 style="margin:0;"></h2>
+    </header>
+
+    <div class="container">
+        
+        <div class="card" data-id="1">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('5mt.jpg')"></div>
+                <div class="card-text">
+                    <h3>Пять минут тишины</h3>
+                    <p>Первый сериал,который посмотрела с мамой, попал прям в сердце. p.s буквально недавно узнала,что выходит новый сезон. </p>
+                    <span class="badge">Сериал</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="2">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('инт.jpg');"></div>
+                <div class="card-text">
+                    <h3>Интерны</h3>
+                    <p>Решила посмотреть из-за форса в тик токе и не зря. Юморной сериал про медиков,которые проходят интернатуру у заведующего - самодура.</p>
+                    <span class="badge">Сериал</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="3">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('пёс.webp');"></div>
+                <div class="card-text">
+                    <h3>Пёс</h3>
+                    <p>Один из самых любимых сериалов.Я обожаю детективы, поэтому и понравился сериал. Никита Панфилов прям в сердечке</p>
+                    <span class="badge">Сериал</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="4">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('сумерки.webp');"></div>
+                <div class="card-text">
+                    <h3>Сумерки</h3>
+                    <p>Базовый фильм для каждой девушки. Раньше я его не любила, а потом вошла во вкус и даже прочитала все книги по этой вселенной.</p>
+                    <span class="badge">Фильм с несколькими частями</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="5">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('иб.jpg');"></div>
+                <div class="card-text">
+                    <h3>Игра Бога</h3>
+                    <p>Летсплей по майнкрафту с сюжетным движком зашёл мне очень хорошо. А Игра Бога один из сезонов Лололошки,который понравился как с технической стороны, так и с сюжетной. </p>
+                    <span class="badge">Летсплей с сюжетом</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-id="6">
+            <div class="card-flex">
+                <div class="card-img" style="background-image: url('крест.jpg');"></div>
+                <div class="card-text">
+                    <h3>Крестоносцы</h3>
+                    <p>Майнкрафт сериал,который понравился сюжетом и персонажами. Как человек,который верит в бога - одобряю. Glorificatum Alteorum.</p>
+                    <span class="badge">Сериал</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <div id="modalRoot" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-close-x" id="modalCloseX">✕</div>
+            <div class="modal-row">
+                <div id="modalLargeImg" class="modal-picture"></div>
+                <div class="modal-info">
+                    <h2 id="modalMainTitle">Заголовок</h2>
+                    <p id="modalMainDesc">Расширенное описание будет здесь...</p>
+                    <button id="modalCloseBtn" class="close-modal-btn">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <footer class="bottom-footer">
+        <p class="footer-text">Навигация по сайту:</p>
+        <div class="footer-links">
+            <a href="index.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </div>
+        <p class="footer-text" style="margin-top: 15px;">Мои социальные сети:</p>
+        <div class="social-icons">
+            <a href="https://vk.com/priashkaa" title="ВКонтакте" target="_blank"><i class="fab fa-vk"></i></a>
+            <a href="https://steamcommunity.com/profiles/76561198358664504/" title="Steam" target="_blank"><i class="fab fa-steam"></i></a>
+            <a href="https://www.youtube.com/@Priashkaa" title="YouTube" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const blocksContent = {
+            1: {
+                title: "Пять минут тишины",
+                description: "Сериал «Пять минут тишины» — о выпускнике академии МЧС Александре Греке, который попадает на стажировку в спасательный отряд в Карелии под руководство опытного командира Гиреева. Вместе с коллегами — врачом Таней, спасателем Колей и кинологом Быковым — он участвует в опасных операциях и постепенно превращается из новичка в профессионала. Сериал сочетает драму и юмор. ",
+                mainImage: "result_1.jpg",
+            },
+            2: {
+                title: "Интерны",
+                description: "Это ситком про молодых врачей-стажёров, которые пытаются выжить в обычной московской больнице. У каждого свой характер: один мечтает всё делать по правилам, другой — только отдыхать, третий вечно в облаках, а четвёртая строит карьеру. Их наставник — гениальный, но циничный завотделением с острым языком. Суть сериала не в медицинских драмах, а в повседневных нелепых ситуациях, ироничных диалогах и конфликтах между интернами, пациентами и начальником. Это комедия об ошибках, дружбе и превращении вчерашних студентов во врачей.",
+                mainImage: "орешки макадамья .jpg"
+            },
+            3: {
+                title: "Пёс",
+                description: "«Пёс» — комедийный детектив о бывшем сыщике Максе, который из-за проблем с алкоголем потерял всё, но получил второй шанс после того, как спас раненую немецкую овчарку. Вместе с находчивым псом он возвращается в полицию и раскрывает сложные преступления, попутно иронизируя над коллегами и жизненными неурядицами.",
+                mainImage: "3840x.webp"
+            },
+            4: {
+                title: "Сумерки",
+                description: "«Сумерки» — это молодёжная романтическая драма с элементами фэнтези о любви обычной старшеклассницы Беллы Свон и вампира Эдварда Каллена, который учится в той же школе. Они пытаются строить отношения, несмотря на его сверхъестественную природу, жажду человеческой крови и строгие правила вампирского клана, но всё усложняется, когда в городе появляется другой вампир, охотящийся на Беллу.",
+                mainImage: "мем сумерки.jpg"
+            },
+            5: {
+                title: "Игра Бога",
+                description: "Лололошка попадает в новый мир, где полубог Люциус (лишённый сил Советом Богов) случайно убивает говорящего попугая Картера и просит героя помочь вернуть его могущество. Вскоре выясняется, что мировое древо, поддерживающее баланс между измерениями, начало увядать — и спасти его можно только с помощью божественной силы Люциуса. Лололошка знакомится с таинственным Аргусом, который на самом деле использует героя, чтобы снять проклятие со своей возлюбленной, но в финале команде удаётся найти способ спасти древо. Этот сезон заложил основу всей дальнейшей вселенной Лололошки и познакомил зрителей с ключевым персонажем Джодахом.",
+                mainImage: "ло.jpg"
+            },
+            6: {
+                title: "Крестоносцы",
+                description: "«Крестоносец» — это российский сюжетный сериал в жанре фэнтези, снятый в Minecraft силами независимой команды авторов. Сюжет рассказывает о бывшем капитане ордена крестоносцев Айвене Вейлере. После того как его орден расформировали, он пытается забыть ужасы прошлого и живет в уединении. Однако случайная встреча в лесу переворачивает его жизнь — Айвену предстоит заново собрать всех рыцарей, возродить орден и помочь расе, которую он когда-то презирал. В процессе герой столкнется с тайнами древних руин, участием в войне, битвами с чудовищами и поиском собственного душевного покоя. Это история о служении высшим силам, братстве и любви.",
+                mainImage: "бух.jpg"
+            }
+        };
+
+        
+        const modal = document.getElementById('modalRoot');
+        const modalImg = document.getElementById('modalLargeImg');
+        const modalTitle = document.getElementById('modalMainTitle');
+        const modalDesc = document.getElementById('modalMainDesc');
+        const closeBtnModal = document.getElementById('modalCloseBtn');
+        const closeX = document.getElementById('modalCloseX');
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 200);
+        }
+
+        function openModalById(id) {
+            const data = blocksContent[id];
+            if (!data) return;
+
+            modalImg.style.backgroundImage = `url('${data.mainImage}')`;
+            modalImg.style.backgroundSize = "cover";
+            modalImg.style.backgroundPosition = "center";
+            
+            modalTitle.innerText = data.title;
+            modalDesc.innerText = data.description;
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        }
+
+        closeBtnModal.addEventListener('click', closeModal);
+        closeX.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-id');
+                if (id && blocksContent[id]) {
+                    openModalById(id);
+                }
+            });
+        });
+
+        
+        const footer = document.querySelector('.bottom-footer');
+        const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    footerObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        if (footer) {
+            footerObserver.observe(footer);
+        }
+
+        const checkFooterVisibility = () => {
+            if (footer) {
+                const footerRect = footer.getBoundingClientRect();
+                if (footerRect.top >= 0 && footerRect.bottom <= (window.innerHeight || document.documentElement.clientHeight)) {
+                    footer.classList.add('visible');
+                }
+            }
+        };
+        window.addEventListener('load', checkFooterVisibility);
+        window.addEventListener('resize', checkFooterVisibility);
+
+        
+        const logoLink = document.getElementById('mainLogoLink');
+        if (logoLink) {
+            logoLink.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            logoLink.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            logoLink.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        }
+
+       
+    </script>
+</body>
+</html>

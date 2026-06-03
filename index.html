@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой игровой блог | SHABASH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }  
+        body {
+             margin: 0;
+             background-image: url('angel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #8d8b8c;
+            color: black;
+            padding: 40px 30px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .logo-block:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        .logo-block img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo-block span {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: black;
+        }
+
+        .content {
+            height: calc(100vh - 200px);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: black;
+        }
+
+        p {
+            line-height: 1.6;
+            color: black;
+        }
+
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #aaa;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 18px;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #cfcfcf;
+            border-bottom-color: #cfcfcf; 
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 40px;
+            line-height: 1.6;
+            max-width: 900px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intro-section {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 45px 30px;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .intro h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .intro p {
+            font-size: 1.6rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .intro ul {
+            text-align: left;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .intro li {
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+        }
+
+        .about-section {
+            background: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 35px;
+            max-width: 870px;
+            margin: 100px auto 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-image {
+            flex-shrink: 0;
+        }
+
+        .about-image img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border: 2px solid white;
+        }
+
+        .about-text h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            margin: 0;
+            color: black;
+            line-height: 1.5;
+        }
+
+        footer.bottom-footer {
+            background-color: rgb(51, 51, 51);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 2px solid #ffffff;
+            margin-top: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        footer.bottom-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, transform 0.2s;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #2575fc;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .social-icons {
+                gap: 25px;
+            }
+            
+            .social-icons a {
+                font-size: 1.4rem;
+            }
+            
+            .footer-text {
+                font-size: 0.9rem;
+            }
+
+            .footer-links {
+                gap: 15px;
+            }
+
+            .footer-links a {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+
+            .about-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px;
+                gap: 20px;
+            }
+
+            .about-image img {
+                width: 160px;
+                height: 160px;
+            }
+
+            .intro h1 {
+                font-size: 1.8rem;
+            }
+
+            .intro p, .intro li {
+                font-size: 1.1rem;
+            }
+
+            .about-text p {
+                font-size: 1rem;
+            }
+
+            .about-text h2 {
+                font-size: 1.6rem;
+            }
+        }
+</style>
+</head>
+<body>
+  <header>
+     
+     <a href="#" class="logo-block" id="mainLogoLink" style="text-decoration: none;">
+      <img src="witch.png" alt="Логотип">
+      <span>SHABASH</span>
+    </a>
+    <nav>
+      <a href="web.html">Главная</a>
+      <a href="play.html">Игры</a>
+      <a href="video.html">Музыка</a>
+      <a href="character.html">Книги</a>
+      <a href="film.html">Фильмы</a>
+    </nav>
+    <h2 style="margin:0;"></h2>
+  </header>
+  <div class="header"></div>
+  <div class="main-content">
+    
+        <section class="intro-section">
+            <div class="intro">
+                <h1>Добро пожаловать на мой блог!</h1>
+                <p>Здесь я буду рассказывать про:</p>
+                <ul>
+                    <li>игры</li>
+                    <li>музыку</li>
+                    <li>книги</li>
+                    <li>фильмы/сериалы</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="about-image">
+                <img src="i .webp" alt="Фотография автора блога">
+            </div>
+            <div class="about-text">
+                <h2>О себе</h2>
+                <p>Всем Хай! Меня зовут Настя, и я разносторонний человек в плане интересов. Учусь на системного администратора, а этот сайт является небольшой частью моего портфолио. </p>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="about-image">
+                <img src="cat.gif" alt="Котик">
+            </div>
+            <div class="about-text">
+                <h2>МЯУ</h2>
+                <p>Надеюсь вам понравится мой сайт. Я старалась ^-^</p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="bottom-footer">
+        <p class="footer-text">Навигация по сайту:</p>
+        <div class="footer-links">
+            <a href="web.html">Главная</a>
+            <a href="play.html">Игры</a>
+            <a href="video.html">Музыка</a>
+            <a href="character.html">Книги</a>
+            <a href="film.html">Фильмы</a>
+        </div>
+        <p class="footer-text" style="margin-top: 15px;">Мои социальные сети:</p>
+        <div class="social-icons">
+            <a href="https://vk.com/priashkaa" title="ВКонтакте" target="_blank"><i class="fab fa-vk"></i></a>
+            <a href="https://steamcommunity.com/profiles/76561198358664504/" title="Steam" target="_blank"><i class="fab fa-steam"></i></a>
+            <a href="https://discordapp.com/users/683645461911044235" title="Discord" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const logoLink = document.getElementById('mainLogoLink');
+        
+        if (logoLink) {
+            logoLink.addEventListener('click', function(event) {
+                event.preventDefault();    
+              
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                if (window.location.hash) {
+                    
+                    history.pushState("", document.title, window.location.pathname + window.location.search);
+                }
+                
+                logoLink.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    if(logoLink) logoLink.style.transform = '';
+                }, 150);
+            });
+        }
+
+        
+        const aboutSections = document.querySelectorAll('.about-section');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        aboutSections.forEach(section => {
+            observer.observe(section);
+        });
+
+        
+        const footer = document.querySelector('.bottom-footer');
+        
+        const footerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    footerObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        if (footer) {
+            footerObserver.observe(footer);
+        }
+
+        
+        const checkVisibilityOnLoad = () => {
+            aboutSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                ) {
+                    section.classList.add('visible');
+                }
+            });
+            
+            if (footer) {
+                const footerRect = footer.getBoundingClientRect();
+                if (
+                    footerRect.top >= 0 &&
+                    footerRect.left >= 0 &&
+                    footerRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    footerRect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                ) {
+                    footer.classList.add('visible');
+                }
+            }
+        };
+
+        window.addEventListener('load', checkVisibilityOnLoad);
+        window.addEventListener('resize', checkVisibilityOnLoad);
+        
+    
+        const currentPath = window.location.pathname;
+        const isMainPage = currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('web.html');
+        
+        
+        const mainNavLinks = document.querySelectorAll('nav a[href="web.html"], .footer-links a[href="web.html"]');
+        
+        mainNavLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                
+                const hrefTarget = this.getAttribute('href');
+                if (hrefTarget === 'web.html') {
+                
+                    if (window.location.pathname.includes('web.html') || window.location.pathname === '/' || window.location.pathname === '/index.html') {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        
+                        if (window.location.hash) {
+                            history.pushState("", document.title, window.location.pathname + window.location.search);
+                        }
+                    }
+                }
+            });
+        });
+        
+        
+        if (window.location.hash && window.location.hash === '#') {
+            
+            setTimeout(() => {
+                if (window.location.hash === '#') {
+                    history.pushState("", document.title, window.location.pathname + window.location.search);
+                }
+            }, 100);
+        }
+        
+        
+        const introBlock = document.querySelector('.intro-section');
+        if (introBlock) {
+            introBlock.style.opacity = '0';
+            introBlock.style.transform = 'translateY(20px)';
+            introBlock.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            setTimeout(() => {
+                introBlock.style.opacity = '1';
+                introBlock.style.transform = 'translateY(0)';
+            }, 200);
+        }
+    </script>
+</body>
+</html>
