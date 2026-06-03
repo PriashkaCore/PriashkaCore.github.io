@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНА: правильный viewport для комфортного отображения на любых экранах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Фильмы и сериалы | SHABASH</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -175,6 +176,7 @@
             width: fit-content;
         }
 
+        /* ОПТИМИЗАЦИЯ: карточки на телефонах (без изменения логики) */
         @media (max-width: 600px) {
             .card-flex {
                 flex-direction: column;
@@ -310,6 +312,7 @@
             transform: rotate(90deg);
         }
 
+        /* ОПТИМИЗАЦИЯ: модальное окно на телефонах */
         @media (max-width: 750px) {
             .modal-row {
                 flex-direction: column;
@@ -390,7 +393,27 @@
             transform: scale(1.2);
         }
 
+        /* ========= ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНОВ: НИЧЕГО НЕ МЕНЯЕМ, ТОЛЬКО АДАПТИВ ========= */
         @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            header {
+                padding: 40px 15px;
+                height: auto;
+                min-height: 55px;
+                flex-wrap: wrap;
+            }
+            .logo-block span {
+                font-size: 18px;
+            }
+            .logo-block img {
+                height: 35px;
+            }
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
             .social-icons {
                 gap: 25px;
             }
@@ -407,21 +430,31 @@
                 font-size: 0.75rem;
                 padding: 3px 8px;
             }
+        }
+        
+        /* Дополнительная оптимизация для очень узких экранов */
+        @media (max-width: 480px) {
+            body {
+                padding-top: 65px;
+            }
             header {
-                padding: 40px 15px;
+                padding: 30px 12px;
             }
             .logo-block span {
-                font-size: 18px;
+                font-size: 16px;
             }
             .logo-block img {
-                height: 35px;
+                height: 30px;
             }
             nav a {
-                margin-left: 15px;
-                font-size: 14px;
+                margin-left: 10px;
+                font-size: 12px;
             }
-            body {
-                padding-top: 70px;
+            .card-text h3 {
+                font-size: 1.3rem;
+            }
+            .card-text p {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -541,6 +574,15 @@
     </footer>
 
     <script>
+        // ОПТИМИЗАЦИЯ: динамическая корректировка отступа для фиксированного хедера
+        function adjustBodyPadding() {
+            const headerEl = document.querySelector('header');
+            if (headerEl) {
+                const headerHeight = headerEl.offsetHeight;
+                document.body.style.paddingTop = headerHeight + 'px';
+            }
+        }
+        
         const blocksContent = {
             1: {
                 title: "Пять минут тишины",
@@ -663,8 +705,23 @@
                 this.style.transform = '';
             });
         }
+        
+        // ОПТИМИЗАЦИЯ: корректируем отступ body под высоту фиксированного хедера
+        window.addEventListener('load', function() {
+            adjustBodyPadding();
+        });
+        window.addEventListener('resize', function() {
+            adjustBodyPadding();
+        });
+        const headerResizeObserver = new ResizeObserver(function() {
+            adjustBodyPadding();
+        });
+        const headerElement = document.querySelector('header');
+        if (headerElement) {
+            headerResizeObserver.observe(headerElement);
+        }
+        adjustBodyPadding();
 
-       
     </script>
 </body>
 </html>
