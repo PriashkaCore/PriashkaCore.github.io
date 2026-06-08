@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНА: обновленный viewport с фиксацией масштаба для комфортного отображения -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Музыкальный блог | SHABASH</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -299,14 +298,14 @@
             transform: scale(1.2);
         }
 
-        /* ========= ТОЛЬКО МОБИЛЬНАЯ ОПТИМИЗАЦИЯ (без изменения стилей) ========= */
+       
         @media (max-width: 768px) {
-            /* Корректируем отступ body, чтобы фиксированный хедер не перекрывал контент */
+            
             body {
                 padding-top: 70px;
             }
             
-            /* Шапка остается неизменной, но немного уменьшаем внутренние отступы на телефонах для сохранения макета */
+           
             header {
                 padding: 40px 20px;
                 height: auto;
@@ -314,7 +313,7 @@
                 flex-wrap: wrap;
             }
             
-            /* Логотип чуть компактнее на маленьких экранах (но пропорции сохраняем) */
+           
             .logo-block img {
                 height: 40px;
             }
@@ -322,13 +321,13 @@
                 font-size: 22px;
             }
             
-            /* Навигация: уменьшаем отступы между ссылками, чтобы они не разрывались */
+            
             nav a {
                 margin-left: 15px;
                 font-size: 16px;
             }
             
-            /* Блоки игр/музыки становятся вертикальными, высота автоматическая */
+            
             .animated-block {
                 flex-direction: column;
                 height: auto;
@@ -338,7 +337,7 @@
                 width: 92%;
             }
             
-            /* Изображение внутри блока — адаптивная ширина, без искажений */
+            
             .block-image {
                 width: 80%;
                 height: auto;
@@ -348,7 +347,7 @@
                 object-fit: cover;
             }
             
-            /* Текст чуть меньше, но сохраняем читаемость */
+            
             .text-content h2 {
                 font-size: 1.8rem;
             }
@@ -357,7 +356,6 @@
                 font-size: 1rem;
             }
             
-            /* Футер: иконки и ссылки становятся чуть компактнее */
             .social-icons a {
                 font-size: 1.5rem;
                 gap: 25px;
@@ -371,7 +369,7 @@
             }
         }
         
-        /* Дополнительная оптимизация для очень узких экранов (iPhone SE и т.д.) */
+        
         @media (max-width: 480px) {
             body {
                 padding-top: 68px;
@@ -406,7 +404,7 @@
             }
         }
         
-        /* Для горизонтальной ориентации на телефонах — сохраняем горизонтальное расположение блоков */
+       
         @media (max-width: 768px) and (orientation: landscape) {
             .animated-block {
                 flex-direction: row;
@@ -510,7 +508,7 @@
     </footer>
 
     <script>
-        // ОПТИМИЗАЦИЯ: динамический отступ для фиксированного хедера (чтобы контент не перекрывался)
+        
         function adjustBodyPadding() {
             const headerEl = document.querySelector('header');
             if (headerEl) {
@@ -542,7 +540,6 @@
                 observer.observe(block);
             });
             
-            // Дополнительная проверка видимости блоков (как в оригинале)
             setTimeout(() => {
                 blocks.forEach(block => {
                     const rect = block.getBoundingClientRect();
@@ -552,15 +549,14 @@
                 });
             }, 100);
             
-            // Корректируем отступ body после загрузки
+        
             adjustBodyPadding();
             
-            // При изменении размера окна пересчитываем отступ
+            
             window.addEventListener('resize', function() {
                 adjustBodyPadding();
             });
             
-            // Отслеживаем изменения высоты хедера (если контент подгрузится)
             const resizeObserver = new ResizeObserver(function() {
                 adjustBodyPadding();
             });
@@ -570,7 +566,7 @@
             }
         });
 
-        // Анимация футера (оригинальная)
+       
         const footer = document.querySelector('.bottom-footer');
         
         const footerObserver = new IntersectionObserver((entries) => {

@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- ОПТИМИЗАЦИЯ: правильный viewport для мобильных устройств (масштабирование, ширина) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Мои любимые игры | Блог SHABASH</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -272,14 +271,14 @@
             transform: scale(1.2);
         }
 
-        /* ========= ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНОВ (ТОЛЬКО АДАПТИВ, НИЧЕГО НЕ МЕНЯЕТ ДИЗАЙН) ========= */
+        
         @media (max-width: 768px) {
-            /* Уменьшаем отступ сверху для тела, чтобы фиксированный хедер не перекрывал контент */
+          
             body {
                 padding-top: 70px;
             }
             
-            /* Шапка остается точно такой же, но чуть уменьшаем внутренние отступы для телефонов (чтобы не разрывалась) */
+            
             header {
                 padding: 40px 20px;
                 height: auto;
@@ -287,7 +286,7 @@
                 flex-wrap: wrap;
             }
             
-            /* Логотип не меняем, просто делаем чуть компактнее на маленьких экранах */
+            
             .logo-block img {
                 height: 40px;
             }
@@ -295,13 +294,13 @@
                 font-size: 22px;
             }
             
-            /* Навигация: ссылки остаются горизонтальными, но уменьшаем отступы */
+            
             nav a {
                 margin-left: 15px;
                 font-size: 16px;
             }
             
-            /* Блоки игр: становятся гибкими, высота автоматическая (вместо calc(100vh/3)), изображение и текст адаптируются */
+            
             .animated-block {
                 flex-direction: column;
                 height: auto;
@@ -311,7 +310,7 @@
                 width: 92%;
             }
             
-            /* Картинка внутри блока — адаптивная ширина */
+            
             .block-image {
                 width: 80%;
                 height: auto;
@@ -321,7 +320,7 @@
                 object-fit: cover;
             }
             
-            /* Текст внутри блока: чуть мельче, но читаемо */
+            
             .text-content h2 {
                 font-size: 1.8rem;
             }
@@ -330,7 +329,7 @@
                 font-size: 1rem;
             }
             
-            /* Футер: социальные иконки чуть меньше */
+          
             .social-icons a {
                 font-size: 1.5rem;
                 gap: 25px;
@@ -344,7 +343,7 @@
             }
         }
         
-        /* Дополнительная оптимизация для очень узких экранов (менее 480px) */
+        
         @media (max-width: 480px) {
             body {
                 padding-top: 70px;
@@ -379,7 +378,7 @@
             }
         }
         
-        /* Для телефонов-планшетов с горизонтальной ориентацией — сохраняем приятный вид */
+        
         @media (max-width: 768px) and (orientation: landscape) {
             .animated-block {
                 flex-direction: row;
@@ -457,7 +456,7 @@
             <img src="rv.png" alt="Изображение блока 5" class="block-image">
             <div class="text-content">
                 <h2>RV There yet</h2>
-                <p>РВ любимая игра Дани и Насти,они так обожают играть в нее.Ну а если серьёзно, игрушка то прикольная,но порой охото ноут в окно выкинуть.</p>
+                <p>РВ любимая игра Дани и Насти,они так обожают играть в нее.Ну а если серьёзно, игрушка то прикольная,но порой охота ноут в окно выкинуть.</p>
             </div>
         </div>
     </div>
@@ -480,7 +479,7 @@
     </footer>
 
     <script>
-        // ОПТИМИЗАЦИЯ: корректируем отступ body под высоту фиксированного хедера (чтобы не перекрывало контент)
+        
         function fixBodyPadding() {
             const headerEl = document.querySelector('header');
             if (headerEl) {
@@ -489,7 +488,6 @@
             }
         }
         
-        // Оригинальная логика анимаций и пересечений (НЕ ТРОГАЕМ)
         document.addEventListener('DOMContentLoaded', function() {
             const blocks = document.querySelectorAll('.animated-block');
 
@@ -521,13 +519,13 @@
                 });
             }, 100);
             
-            // Запускаем фикс отступа после загрузки и при ресайзе
+            
             fixBodyPadding();
             window.addEventListener('resize', function() {
                 fixBodyPadding();
             });
             
-            // также отслеживаем изменение высоты хедера (если вдруг контент подгрузится)
+           
             const resizeObserver = new ResizeObserver(function() {
                 fixBodyPadding();
             });
@@ -537,7 +535,7 @@
             }
         });
         
-        // Футер анимация (оригинальная, без изменений)
+        
         const footer = document.querySelector('.bottom-footer');
         
         const footerObserver = new IntersectionObserver((entries) => {
@@ -573,7 +571,6 @@
         window.addEventListener('load', checkFooterVisibility);
         window.addEventListener('resize', checkFooterVisibility);
         
-        // Оригинальный эффект для лого (без изменений)
         const logoLink = document.getElementById('mainLogoLink');
         if (logoLink) {
             logoLink.addEventListener('mousedown', function() {
